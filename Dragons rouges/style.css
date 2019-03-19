@@ -20,7 +20,7 @@ html, body {
 header {
 	display: flex;
 	justify-content: space-between;
-	background: #ff0000;
+	background: #ce0033;
 	height: 10vh;
 	min-height: 60px;
 	align-items: center;
@@ -114,7 +114,7 @@ header {
 
 .selected {
 	color: #FFF;
-	background-color: #FF0000 !important;
+	background-color: #ce0033 !important;
 }
 
 .main_button {
@@ -186,18 +186,19 @@ header {
 }
 
 .friend {
+	font-size: 14px;
 	display: flex;
 	align-items: center;
 	border: 2px solid #CCC;
 	width: 25%;
 	background: #DDD;
-	padding: 10px;
 	color: #555;
+	height: 60px;
 }
 
 .friend i {
-	margin-left: 20px;
-	margin-right: 30px;
+	margin-left: 10px;
+	margin-right: 5px;
 }
 
 
@@ -216,7 +217,7 @@ header {
 
 footer {
 	display: flex;
-	background: #ff0000;
+	background: #ce0033;
 	position: fixed;
 	width: 100%;
 	bottom: 0;

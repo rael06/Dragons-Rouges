@@ -5,7 +5,7 @@ window.onload = function () {
 
 	var htmlElementMember = document.getElementsByClassName("member_name");
 
-	var friendsView = function () {
+	var friendsView = function () { //template for display friends
 		document.querySelector(".search").classList.add("hide");
 		document.querySelector(".title_and_sorter_container").classList.add("hide");
 		document.getElementById("friendsButton").classList.add("hide");
@@ -16,8 +16,8 @@ window.onload = function () {
 		document.getElementById("member_friends").classList.remove("hide");
 	}
 
-	var statisticsView = function () {
-		if (window.innerWidth > 991) {
+	var statisticsView = function () { //template for display statistics
+		if (window.innerWidth > 991) { // if screen width > 991
 			document.querySelector(".search").classList.add("hide");
 			document.querySelector(".title_and_sorter_container").classList.add("hide");
 			document.getElementById("map").classList.add("hide");
@@ -43,15 +43,19 @@ window.onload = function () {
 			document.getElementById("statistics").classList.remove("hide");
 		}
 	}
-	var lastSelected = document.querySelector(".member_name");
-	var selectedView = function () {
-		if (this.id !== "back_friends") {
 
-			var getMember = function (clicked) {
+	var lastSelected = document.querySelector(".member_name");
+
+	var selectedView = function () { //template for display a member informations
+
+		if (this.id !== "back_friends") { //to be sure getMember and memberLocator never 
+											//runs if button member_info is clicked
+
+			var getMember = function (clicked) {	//to find member name
 				return clicked.querySelectorAll('td')[1].innerHTML + " " + clicked.querySelectorAll('td')[0].innerHTML
 			};
 
-			var memberLocator = function (arg) {
+			var memberLocator = function (arg) {	//to find member in database comparing his name
 				for (let i = 0; i < database.length; i++) {
 					if (getMember(arg).toLowerCase() == database[i].name.toLowerCase()) {
 						return {lat: database[i].latitude, lng: database[i].longitude}
@@ -62,11 +66,13 @@ window.onload = function () {
 
 			memberLocation = memberLocator(this);
 		}
-		initMap();
 
-		lastSelected.classList.remove("selected");
-		this.classList.add("selected");
-		lastSelected = this;
+		initMap(); //to launch map api
+
+		lastSelected.classList.remove("selected");	//
+		this.classList.add("selected");				//to switch background and text color of selected
+		lastSelected = this;						//
+
 		document.querySelector(".search").classList.add("hide");
 		document.querySelector(".title_and_sorter_container").classList.add("hide");
 		document.getElementById("members_list").classList.add("hide");
@@ -76,6 +82,7 @@ window.onload = function () {
 		document.getElementById("back").classList.remove("hide");
 		document.getElementById("member_info").classList.remove("hide");
 		document.getElementById("friendsButton").classList.remove("hide");
+
 		if (window.innerWidth > 991) {
 			document.getElementById("map").classList.remove("hide");
 			document.querySelector(".search").classList.remove("hide");
@@ -87,11 +94,11 @@ window.onload = function () {
 			document.getElementById("back").classList.add("hide");
 			document.getElementById("member_info").classList.remove("hide");
 			document.getElementById("friendsButton").classList.add("hide");
-
 		}
 	};
 
-	var homeView = function () {
+	var homeView = function () {	//template of home view
+
 		if (window.innerWidth > 991) {
 			document.getElementById("map").classList.remove("hide");
 			document.getElementById("back_friends").classList.add("hide");
@@ -121,8 +128,7 @@ window.onload = function () {
 		}
 	}
 
-	//fonction retournant la proportion h/f
-	var genderStat = function () {
+	var genderStat = function () { //returns array of the count of male/female members
 		var femaleCount = 0;
 		var maleCount = 0;
 		var gender = "";
@@ -138,8 +144,7 @@ window.onload = function () {
 		return [maleCount,femaleCount];
 	};
 
-	//fonction retournant le taux d'activité
-	var activityStat = function () {
+	var activityStat = function () { //returns array of the count of active/non-active members
 		var active = 0;
 		var nonActive = 0;
 		for (let i = 0; i < database.length; i++) {
@@ -153,8 +158,7 @@ window.onload = function () {
 		return [nonActive,active];
 	};
 
-	//fonction retournant la proportion des âges
-	var ageStat = function () {
+	var ageStat = function () { //returns array of ages rate
 		var ageCount_25less = 0;
 		var ageCount_26_35 = 0;
 		var ageCount_36more = 0;
@@ -220,7 +224,7 @@ window.onload = function () {
 		}
 	});
 
-	var sorter = function (_toSort, type, by, useSplitReverse) {
+	var sorter = function (_toSort, type, by, useSplitReverse) {	//function to sort the table
 		var toSort = JSON.parse(JSON.stringify(_toSort));
 		var nextName = "";
 		var currentName = "";
@@ -245,8 +249,8 @@ window.onload = function () {
 		return toSort;
 	};
 
-	var updateMembersListHeadSize = function () {
-		var width = 0;
+	var updateMembersListHeadSize = function () {	//to update the table head size of the members list table
+		var width = 0;								//in order to align titles of thead with tbody elements
 		var parentWidth = 0;
 		var membersListHeadSize = 0;
 		var lastTd = document.querySelector(".table_head td:last-of-type");
@@ -258,19 +262,19 @@ window.onload = function () {
 		lastTd.style.width = membersListHeadSize + "px";
 	};
 
-	var membersList = new Vue({
+	var membersList = new Vue({ 
 		el: "#main_vue",
 		data: {
 			search: "",
-			member: database[0] || Object,
+			member: database[0],
 			by: "",
 			friendsDisplay: false
 		},
 		computed: {
-			filterName: function () {
+			filterName: function () {	//searched entry's name
 				return this.membersData.filter(_member => _member.name.toLowerCase().includes(this.search.toLowerCase()))
 			},
-			membersData: function () {
+			membersData: function () {	//sorted database
 				var useSplitReverse = true;
 				(this.by === "name")? useSplitReverse = true : useSplitReverse = false;
 				return sorter(database, 1, this.by, useSplitReverse)
@@ -280,7 +284,7 @@ window.onload = function () {
 			friendsDisplayer: function () {
 				this.friendsDisplay = true;
 			},
-			memberSelection: function (item) {
+			memberSelection: function (item) {	//focus and update member
 				this.member = item;
 			},
 			name: (item) => item.name.split(" ")[1],
